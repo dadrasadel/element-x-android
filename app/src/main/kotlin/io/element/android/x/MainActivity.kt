@@ -8,6 +8,7 @@
 package io.element.android.x
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -39,6 +40,7 @@ import io.element.android.x.di.AppBindings
 import io.element.android.x.intent.SafeUriHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.Locale
 
 private val loggerTag = LoggerTag("MainActivity")
 
@@ -48,6 +50,7 @@ class MainActivity : NodeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
+        setLocale("fa")
         installSplashScreen()
         super.onCreate(savedInstanceState)
         appBindings = bindings()
@@ -153,5 +156,13 @@ class MainActivity : NodeActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Timber.tag(loggerTag.value).w("onDestroy")
+    }
+
+    private fun setLocale(lang: String) {
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 }
