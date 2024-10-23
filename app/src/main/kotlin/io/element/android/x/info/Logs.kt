@@ -17,7 +17,6 @@ import java.util.Locale
 
 fun logApplicationInfo(context: Context) {
     val appVersion = buildString {
-        append(BuildConfig.VERSION_NAME)
         append(" (")
         append(context.getVersionCodeFromManifest())
         append(") - ")

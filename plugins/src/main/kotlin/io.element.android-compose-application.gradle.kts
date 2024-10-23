@@ -16,14 +16,15 @@ import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
 plugins {
-    id("com.android.application")
+//    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
     id("com.autonomousapps.dependency-analysis")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
-    androidConfig(project)
+//    androidConfig(project)
     composeConfig()
     compileOptions {
         isCoreLibraryDesugaringEnabled = true

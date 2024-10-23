@@ -28,7 +28,7 @@ plugins {
     id("io.element.android-compose-application")
     alias(libs.plugins.kotlin.android)
     // When using precompiled plugins, we need to apply the firebase plugin like this
-    id(libs.plugins.firebaseAppDistribution.get().pluginId)
+//    id(libs.plugins.firebaseAppDistribution.get().pluginId)
     alias(libs.plugins.knit)
     id("kotlin-parcelize")
     alias(libs.plugins.licensee)
@@ -41,16 +41,16 @@ setupKover()
 
 android {
     namespace = "io.element.android.x"
-
+    compileSdk = 34
     defaultConfig {
-        applicationId = if (isEnterpriseBuild) {
-            "io.element.enterprise"
-        } else {
-            "io.element.android.x"
-        }
+//        applicationId = if (isEnterpriseBuild) {
+//            "io.element.enterprise"
+//        } else {
+//            "io.element.android.x"
+//        }
         targetSdk = Versions.targetSdk
-        versionCode = Versions.versionCode
-        versionName = Versions.versionName
+//        versionCode = Versions.versionCode
+//        versionName = Versions.versionName
 
         // Keep abiFilter for the universalApk
         ndk {
@@ -73,7 +73,7 @@ android {
                 isUniversalApk = true
             }
         }
-
+        multiDexEnabled = true
         defaultConfig {
             resourceConfigurations += locales
         }
@@ -107,7 +107,7 @@ android {
     buildTypes {
         getByName("debug") {
             resValue("string", "app_name", "$baseAppName dbg")
-            applicationIdSuffix = ".debug"
+//            applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
 
@@ -119,7 +119,7 @@ android {
                 isRemoveUnusedCode = true
                 isObfuscate = false
                 isOptimizeCode = true
-                isRemoveUnusedResources = true
+//                isRemoveUnusedResources = true
                 proguardFiles("proguard-rules.pro")
             }
         }
@@ -127,8 +127,8 @@ android {
         register("nightly") {
             val release = getByName("release")
             initWith(release)
-            applicationIdSuffix = ".nightly"
-            versionNameSuffix = "-nightly"
+//            applicationIdSuffix = ".nightly"
+//            versionNameSuffix = "-nightly"
             resValue("string", "app_name", "$baseAppName nightly")
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
@@ -136,29 +136,29 @@ android {
             postprocessing {
                 initWith(release.postprocessing)
             }
-
-            firebaseAppDistribution {
-                artifactType = "APK"
-                // We upload the universal APK to fix this error:
-                // "App Distribution found more than 1 output file for this variant.
-                // Please contact firebase-support@google.com for help using APK splits with App Distribution."
-                artifactPath = "$rootDir/app/build/outputs/apk/gplay/nightly/app-gplay-universal-nightly.apk"
-                // artifactType = "AAB"
-                // artifactPath = "$rootDir/app/build/outputs/bundle/nightly/app-nightly.aab"
-                releaseNotesFile = "tools/release/ReleaseNotesNightly.md"
-                groups = if (isEnterpriseBuild) {
-                    "enterprise-testers"
-                } else {
-                    "external-testers"
-                }
-                // This should not be required, but if I do not add the appId, I get this error:
-                // "App Distribution halted because it had a problem uploading the APK: [404] Requested entity was not found."
-                appId = if (isEnterpriseBuild) {
-                    "1:912726360885:android:3f7e1fe644d99d5a00427c"
-                } else {
-                    "1:912726360885:android:e17435e0beb0303000427c"
-                }
-            }
+//
+//            firebaseAppDistribution {
+//                artifactType = "AAR"
+//                // We upload the universal APK to fix this error:
+//                // "App Distribution found more than 1 output file for this variant.
+//                // Please contact firebase-support@google.com for help using APK splits with App Distribution."
+//                artifactPath = "$rootDir/app/build/outputs/apk/gplay/nightly/app-gplay-universal-nightly.apk"
+//                // artifactType = "AAB"
+//                // artifactPath = "$rootDir/app/build/outputs/bundle/nightly/app-nightly.aab"
+//                releaseNotesFile = "tools/release/ReleaseNotesNightly.md"
+//                groups = if (isEnterpriseBuild) {
+//                    "enterprise-testers"
+//                } else {
+//                    "external-testers"
+//                }
+//                // This should not be required, but if I do not add the appId, I get this error:
+//                // "App Distribution halted because it had a problem uploading the APK: [404] Requested entity was not found."
+//                appId = if (isEnterpriseBuild) {
+//                    "1:912726360885:android:3f7e1fe644d99d5a00427c"
+//                } else {
+//                    "1:912726360885:android:e17435e0beb0303000427c"
+//                }
+//            }
         }
     }
 
@@ -192,19 +192,19 @@ androidComponents {
         "x86_64" to 4,
     )
 
-    onVariants { variant ->
-        // Assigns a different version code for each output APK
-        // other than the universal APK.
-        variant.outputs.forEach { output ->
-            val name = output.filters.find { it.filterType == ABI }?.identifier
-
-            // Stores the value of abiCodes that is associated with the ABI for this variant.
-            val abiCode = abiVersionCodes[name] ?: 0
-            // Assigns the new version code to output.versionCode, which changes the version code
-            // for only the output APK, not for the variant itself.
-            output.versionCode.set((output.versionCode.orNull ?: 0) * 10 + abiCode)
-        }
-    }
+//    onVariants { variant ->
+//        // Assigns a different version code for each output APK
+//        // other than the universal APK.
+//        variant.outputs.forEach { output ->
+//            val name = output.filters.find { it.filterType == ABI }?.identifier
+//
+//            // Stores the value of abiCodes that is associated with the ABI for this variant.
+//            val abiCode = abiVersionCodes[name] ?: 0
+//            // Assigns the new version code to output.versionCode, which changes the version code
+//            // for only the output APK, not for the variant itself.
+//            output.versionCode.set((output.versionCode.orNull ?: 0) * 10 + abiCode)
+//        }
+//    }
 
     val reportingExtension: ReportingExtension = project.extensions.getByType(ReportingExtension::class.java)
     configureLicensesTasks(reportingExtension)

@@ -13,10 +13,10 @@ android {
     namespace = "io.element.android.samples.minimal"
 
     defaultConfig {
-        applicationId = "io.element.android.samples.minimal"
+//        applicationId = "io.element.android.samples.minimal"
         targetSdk = Versions.targetSdk
-        versionCode = Versions.versionCode
-        versionName = Versions.versionName
+//        versionCode = Versions.versionCode
+//        versionName = Versions.versionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
